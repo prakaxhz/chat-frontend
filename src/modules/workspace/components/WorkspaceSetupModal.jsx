@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWorkspace } from '../hooks/useWorkspace';
 import Modal from '../../../shared/components/Modal/Modal';
 import Input from '../../../shared/components/Input/Input';
 import Button from '../../../shared/components/Button/Button';
 
-const WorkspaceSetupModal = ({ isOpen, onClose, isDismissible = false }) => {
+const WorkspaceSetupModal = ({ isOpen }) => {
   const { handleCreateWorkspace, clearFieldError, fieldErrors, error, isLoading } = useWorkspace();
   const [formData, setFormData] = useState({
     name: '',
@@ -18,23 +18,20 @@ const WorkspaceSetupModal = ({ isOpen, onClose, isDismissible = false }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await handleCreateWorkspace(formData);
-    if (res.meta.requestStatus === 'fulfilled' && onClose) {
-      onClose();
-    }
+    await handleCreateWorkspace(formData);
   };
 
   return (
     <Modal 
       isOpen={isOpen} 
-      onClose={isDismissible ? onClose : undefined}
-      title={isDismissible ? "Create Workspace" : "Create Your First Workspace"}
+      onClose={() => {}} // Empty function prevents closing by clicking 'X' or outside
+      title="Create Your First Workspace" 
       maxWidth="max-w-lg"
     >
       <div className="text-center mb-6">
-        <h4 className="text-gray-900 text-lg font-medium mb-2">{isDismissible ? 'Create a new workspace' : 'Welcome aboard! 🎉'}</h4>
+        <h4 className="text-gray-900 text-lg font-medium mb-2">Welcome aboard! 🎉</h4>
         <p className="text-gray-500 text-sm">
-          {isDismissible ? 'Add a new workspace for your team.' : 'To get started, let\'s create a workspace for your team.'}
+          To get started, let's create a workspace for your team.
         </p>
       </div>
 

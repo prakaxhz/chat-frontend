@@ -5,9 +5,12 @@ import { fetchChannels, createChannel, setActiveChannel, clearChannelError } fro
 export const useChannel = () => {
   const dispatch = useDispatch();
   const { channels, activeChannel, isFetching, error } = useSelector((state) => state.channel);
+  const activeWorkspace = useSelector((state) => state.workspace.activeWorkspace);
 
-  const loadChannels = useCallback(() => {
-    dispatch(fetchChannels());
+  const loadChannels = useCallback((workspaceId) => {
+    if (workspaceId) {
+      dispatch(fetchChannels(workspaceId));
+    }
   }, [dispatch]);
 
   const selectChannel = useCallback((channel) => {
@@ -15,7 +18,8 @@ export const useChannel = () => {
   }, [dispatch]);
 
   const handleCreateChannel = async (data) => {
-    return await dispatch(createChannel(data));
+    if (!activeWorkspace) return null;
+    return await dispatch(createChannel({ workspaceId: activeWorkspace._id || activeWorkspace.code, data }));
   };
 
   const clearError = useCallback(() => {
@@ -33,4 +37,3 @@ export const useChannel = () => {
     clearError
   };
 };
-

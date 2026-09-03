@@ -1,4 +1,4 @@
-
+import React from 'react';
 
 const Toggle = ({ checked, onChange, label, description, id }) => {
   return (
@@ -11,8 +11,8 @@ const Toggle = ({ checked, onChange, label, description, id }) => {
           aria-checked={checked}
           onClick={() => onChange(!checked)}
           className={`
-            relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
-            ${checked ? 'bg-primary' : 'bg-gray-200'}
+            relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+            ${checked ? 'bg-blue-600' : 'bg-gray-200'}
           `}
         >
           <span
@@ -27,12 +27,15 @@ const Toggle = ({ checked, onChange, label, description, id }) => {
       {(label || description) && (
         <div className="flex flex-col">
           {label && (
-            <div className="text-sm font-medium text-gray-900">
-            </div>
+            <label htmlFor={id} className="text-sm font-medium text-gray-900 cursor-pointer" onClick={() => onChange(!checked)}>
+              {label}
+            </label>
           )}
-            <p className="text-xs text-gray-500">
+          {description && (
+            <p className="text-xs text-gray-500" onClick={() => onChange(!checked)}>
               {description}
             </p>
+          )}
         </div>
       )}
     </div>
@@ -40,4 +43,3 @@ const Toggle = ({ checked, onChange, label, description, id }) => {
 };
 
 export default Toggle;
-

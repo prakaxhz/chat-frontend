@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Icons } from '../../../shared/utils/icons';
 
 const ChatWelcome = () => {
@@ -18,4 +18,3 @@ const ChatWelcome = () => {
 };
 
 export default ChatWelcome;
-

@@ -1,27 +1,21 @@
-
-import { Icons } from '../../../shared/utils/icons';
-import { useChannel } from '../../channel/hooks/useChannel';
-import ChannelHeader from '../../channel/components/ChannelHeader';
-import ChatWelcome from '../components/ChatWelcome';
+import React from 'react';
 
 const ChatPage = () => {
-  const { activeChannel, isFetching } = useChannel();
-
-  if (isFetching && !activeChannel) {
-    return (
-      <div className="flex-1 flex flex-col h-full bg-white relative items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  if (!activeChannel) {
-    return <ChatWelcome />;
-  }
-
   return (
     <div className="flex-1 flex flex-col h-full bg-white relative">
-      <ChannelHeader channel={activeChannel} />
+      {/* Chat Header (Channel Details) */}
+      <div className="h-14 border-b border-gray-200 flex items-center px-5 justify-between shrink-0 shadow-sm z-10">
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-bold text-gray-900"># general</span>
+        </div>
+        <div className="flex items-center gap-4 text-gray-500">
+          <div className="flex -space-x-2">
+            <div className="w-7 h-7 rounded-full bg-blue-500 border-2 border-white"></div>
+            <div className="w-7 h-7 rounded-full bg-green-500 border-2 border-white"></div>
+          </div>
+          <span className="text-sm font-medium">12</span>
+        </div>
+      </div>
 
       {/* Chat Body (Messages) */}
       <div className="flex-1 overflow-y-auto p-5 space-y-6 bg-white custom-scrollbar">
@@ -69,28 +63,28 @@ const ChatPage = () => {
       {/* Message Input Area */}
       <div className="p-5 pt-0 shrink-0 bg-white">
         <div className="border border-gray-400 rounded-xl overflow-hidden focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600 transition-shadow">
-          <div className="bg-gray-50 px-2 py-2 flex gap-1 border-b border-gray-200 text-gray-500">
-            <button className="p-1 hover:bg-gray-200 rounded flex"><Icons.Bold fontSize="small" /></button>
-            <button className="p-1 hover:bg-gray-200 rounded flex"><Icons.Italic fontSize="small" /></button>
-            <button className="p-1 hover:bg-gray-200 rounded flex"><Icons.Strike fontSize="small" /></button>
+          <div className="bg-gray-50 px-2 py-2 flex gap-1 border-b border-gray-200">
+            <button className="p-1 text-gray-500 hover:bg-gray-200 rounded"><span className="font-bold">B</span></button>
+            <button className="p-1 text-gray-500 hover:bg-gray-200 rounded"><span className="italic">I</span></button>
+            <button className="p-1 text-gray-500 hover:bg-gray-200 rounded"><span className="line-through">S</span></button>
             <div className="w-px bg-gray-300 mx-1"></div>
-            <button className="p-1 hover:bg-gray-200 rounded flex"><Icons.Link fontSize="small" /></button>
+            <button className="p-1 text-gray-500 hover:bg-gray-200 rounded">🔗</button>
           </div>
           <div className="p-3 bg-white">
             <input 
               type="text" 
-              placeholder={`Message #${activeChannel?.name || 'general'}`}
+              placeholder="Message #general" 
               className="w-full bg-transparent outline-none text-gray-900 placeholder-gray-500"
             />
           </div>
           <div className="px-2 py-2 flex justify-between items-center bg-white">
             <div className="flex gap-1 text-gray-500">
-              <button className="p-1.5 hover:bg-gray-100 rounded-full flex"><Icons.AddCircle fontSize="small" /></button>
-              <button className="p-1.5 hover:bg-gray-100 rounded-full flex"><Icons.Emoji fontSize="small" /></button>
-              <button className="p-1.5 hover:bg-gray-100 rounded-full flex"><Icons.Mentions fontSize="small" /></button>
+              <button className="p-1.5 hover:bg-gray-100 rounded-full">+</button>
+              <button className="p-1.5 hover:bg-gray-100 rounded-full">😀</button>
+              <button className="p-1.5 hover:bg-gray-100 rounded-full">@</button>
             </div>
-            <button className="w-8 h-8 rounded bg-gray-200 text-gray-400 hover:text-white hover:bg-green-600 flex items-center justify-center transition-colors">
-              <Icons.Send fontSize="small" />
+            <button className="w-8 h-8 rounded bg-gray-200 text-gray-400 flex items-center justify-center">
+              ➤
             </button>
           </div>
         </div>
@@ -100,4 +94,3 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
-

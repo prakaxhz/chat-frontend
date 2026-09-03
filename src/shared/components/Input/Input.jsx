@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 
 const Input = forwardRef(({ 
   label, 
@@ -45,7 +45,7 @@ const Input = forwardRef(({
         {isPassword && (
           <button
             type="button"
-            className="absolute cursor-pointer inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
             onClick={() => setShowPassword(!showPassword)}
             tabIndex="-1"
             title={showPassword ? "Hide password" : "Show password"}
