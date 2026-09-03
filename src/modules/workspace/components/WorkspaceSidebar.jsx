@@ -1,4 +1,3 @@
-import React from 'react';
 import ChannelList from '../../channel/components/ChannelList';
 import ConversationList from '../../conversation/components/ConversationList';
 

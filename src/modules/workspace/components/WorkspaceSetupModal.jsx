@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useWorkspace } from '../hooks/useWorkspace';
 import Modal from '../../../shared/components/Modal/Modal';
 import Input from '../../../shared/components/Input/Input';

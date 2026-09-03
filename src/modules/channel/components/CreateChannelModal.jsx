@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Modal from '../../../shared/components/Modal/Modal';
 import { useChannel } from '../hooks/useChannel';
 
@@ -49,7 +49,7 @@ const CreateChannelModal = ({ isOpen, onClose }) => {
       } else {
         handleClose();
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);

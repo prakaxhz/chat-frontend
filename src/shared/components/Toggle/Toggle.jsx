@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Toggle = ({ checked, onChange, label, description, id }) => {
   return (
     <div className="flex items-start gap-3 mt-2">

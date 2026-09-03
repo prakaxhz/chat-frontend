@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useParams, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Icons } from '../shared/utils/icons';
 import ConfirmationModal from '../shared/components/Modal/ConfirmationModal';
 
@@ -18,7 +17,7 @@ import {
 const ChatLayout = () => {
   const { workspaceCode } = useParams();
   const navigate = useNavigate();
-  const { handleLogout, user } = useAuth();
+  const { handleLogout } = useAuth();
   const { workspaces, activeWorkspace, isInitialized, isFetching, loadWorkspaces, selectWorkspace } = useWorkspace();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
