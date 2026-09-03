@@ -1,45 +1,79 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { useAuth } from '../modules/auth/hooks/useAuth';
-import ConfirmationModal from '../shared/components/Modal/ConfirmationModal';
+import { useState, useEffect } from 'react';
+import { Outlet, useParams, useNavigate } from 'react-router-dom';
 import { Icons } from '../shared/utils/icons';
+import ConfirmationModal from '../shared/components/Modal/ConfirmationModal';
+
+// Using clean barrel file imports
+import { useAuth } from '../modules/auth';
+import { useChannelSocket } from '../modules/channel';
+import { 
+  useWorkspace,
+  WorkspaceSetupModal,
+  WorkspaceSwitcher,
+  WorkspaceSidebar,
+  WorkspaceTopbar 
+} from '../modules/workspace';
 
 const ChatLayout = () => {
-  const { handleLogout, user } = useAuth();
+ 
+  const { workspaceCode } = useParams();
+  const navigate = useNavigate();
+  const { handleLogout } = useAuth();
+  const { workspaces, activeWorkspace, isInitialized, isFetching, loadWorkspaces, selectWorkspace } = useWorkspace();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  useEffect(() => {
+    loadWorkspaces();
+  }, [loadWorkspaces]);
+
+  // Hook handles socket events for channels automatically
+  useChannelSocket(activeWorkspace?._id);
+
+  // Sync active workspace with URL
+  useEffect(() => {
+    if (isInitialized && workspaces.length > 0) {
+      if (!workspaceCode) {
+        navigate(`/${workspaces[0].code}`, { replace: true });
+      } else {
+        const matchedWorkspace = workspaces.find(w => w.code === workspaceCode);
+        if (matchedWorkspace && (!activeWorkspace || activeWorkspace.code !== workspaceCode)) {
+          selectWorkspace(matchedWorkspace);
+        } else if (!matchedWorkspace) {
+          navigate(`/${workspaces[0].code}`, { replace: true });
+        }
+      }
+    }
+  }, [workspaces, workspaceCode, activeWorkspace, isInitialized, navigate, selectWorkspace]);
 
   const confirmLogout = () => {
     setIsLogoutModalOpen(false);
     handleLogout();
   };
 
-  return (
-    <div className="flex h-screen bg-gray-100 font-sans">
-      <div className="w-[260px] bg-primary text-white flex flex-col justify-between">
-        {/* Sidebar Header */}
-        <div className="p-5">
-          <h2 className="text-xl font-bold m-0">Workspace</h2>
-        </div>
-        
-        {/* Sidebar Footer */}
-        <div className="p-4 border-t border-blue-900 bg-blue-950 flex flex-col gap-3">
-          <div className="text-sm truncate">
-            {user?.name ? <span className="font-semibold">{user.name}</span> : 'User Profile'}
-            {user?.email && <div className="text-xs text-blue-300 truncate">{user.email}</div>}
-          </div>
-          <button 
-            onClick={() => setIsLogoutModalOpen(true)}
-            className="w-full flex items-center gap-2 text-sm py-2 px-3 rounded text-red-300 hover:bg-white/10 hover:text-red-400 transition-colors"
-          >
-            <Icons.Logout fontSize="small" />
-            Sign Out
-          </button>
-        </div>
+  if (!isInitialized || isFetching) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
+    );
+  }
+
+  // Show setup modal if user has no workspaces
+  if (isInitialized && workspaces.length === 0) {
+    return <WorkspaceSetupModal />;
+  }
+
+  return (
+    <div className="flex flex-col h-screen font-sans bg-gray-100">
+      <WorkspaceTopbar />
       
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Main Content */}
-        <Outlet />
+      <div className="flex flex-1 overflow-hidden">
+        <WorkspaceSwitcher />
+        <WorkspaceSidebar />
+        
+        <div className="flex-1 flex flex-col min-w-0 bg-white relative">
+          <Outlet />
+        </div>
       </div>
 
       <ConfirmationModal
@@ -53,7 +87,6 @@ const ChatLayout = () => {
         cancelText="Cancel"
         variant="danger"
       >
-        {/* Optional inner content matching the "DANGER" list style */}
         <div className="bg-red-50 rounded-xl p-4">
           <div className="flex items-start gap-3 text-sm text-gray-700 font-medium">
             <Icons.Warning fontSize="small" className="text-red-500 mt-0.5 shrink-0" />

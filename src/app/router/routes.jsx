@@ -1,21 +1,17 @@
-/* eslint-disable react-refresh/only-export-components */
+ 
 import { Navigate } from 'react-router-dom';
-import LoginPage from '../../modules/auth/pages/LoginPage';
-import RegisterPage from '../../modules/auth/pages/RegisterPage';
-import OtpPage from '../../modules/auth/pages/OtpPage';
-import ForgotPasswordPage from '../../modules/auth/pages/ForgotPasswordPage';
-import ResetOtpPage from '../../modules/auth/pages/ResetOtpPage';
-import ResetPasswordPage from '../../modules/auth/pages/ResetPasswordPage';
+import { 
+  LoginPage, 
+  RegisterPage, 
+  OtpPage, 
+  ForgotPasswordPage, 
+  ResetOtpPage, 
+  ResetPasswordPage 
+} from '../../modules/auth';
 import ChatLayout from '../../layouts/ChatLayout';
 import ProtectedRoute from './ProtectedRoute';
 
-// Mock component for the main chat page for now
-const ChatPlaceholder = () => (
-  <div style={{ padding: '20px' }}>
-    <h1>Main Chat Application</h1>
-    <p>Welcome to the protected workspace.</p>
-  </div>
-);
+import ChatPage from '../../modules/chat/pages/ChatPage';
 
 export const routes = [
   {
@@ -31,14 +27,14 @@ export const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/:workspaceCode?',
     element: (
       <ProtectedRoute>
         <ChatLayout />
       </ProtectedRoute>
     ),
     children: [
-      { path: '', element: <ChatPlaceholder /> }
+      { path: ':channelCode?', element: <ChatPage /> }
     ]
   },
   {
@@ -46,4 +42,3 @@ export const routes = [
     element: <Navigate to="/auth/login" replace />
   }
 ];
-

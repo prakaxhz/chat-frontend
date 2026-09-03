@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppRouter from './app/router/AppRouter';
 import { fetchCurrentUser } from './modules/auth/store/authSlice';
+import { SocketProvider } from './app/providers/SocketProvider';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,7 +23,9 @@ function App() {
   }
 
   return (
-    <AppRouter />
+    <SocketProvider>
+      <AppRouter />
+    </SocketProvider>
   );
 }
 
