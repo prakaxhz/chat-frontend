@@ -17,7 +17,7 @@ import {
 const ChatLayout = () => {
   const { workspaceCode } = useParams();
   const navigate = useNavigate();
-  const { handleLogout } = useAuth();
+  const { user, handleLogout } = useAuth();
   const { workspaces, activeWorkspace, isInitialized, isFetching, loadWorkspaces, selectWorkspace } = useWorkspace();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
@@ -67,8 +67,17 @@ const ChatLayout = () => {
       <WorkspaceTopbar />
       
       <div className="flex flex-1 overflow-hidden">
-        <WorkspaceSwitcher />
-        <WorkspaceSidebar />
+        <WorkspaceSwitcher 
+          workspaces={workspaces}
+          activeWs={activeWorkspace}
+          selectWorkspace={selectWorkspace}
+          onOpenCreateModal={() => {}} // TODO: implement create modal
+          onOpenLogoutModal={() => setIsLogoutModalOpen(true)}
+        />
+        <WorkspaceSidebar 
+          activeWs={activeWorkspace}
+          user={user}
+        />
         
         <div className="flex-1 flex flex-col min-w-0 bg-white relative">
           <Outlet />

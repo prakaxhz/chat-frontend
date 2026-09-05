@@ -64,7 +64,10 @@ const workspaceSlice = createSlice({
     builder.addCase(fetchWorkspaces.fulfilled, (state, action) => {
       state.isFetching = false;
       state.isInitialized = true;
-      state.workspaces = action.payload?.data || [];
+      
+      // Support both the old API format ({ workspaces: [...] }) and new API format ([...])
+      const data = action.payload?.data;
+      state.workspaces = Array.isArray(data) ? data : (data?.workspaces || []);
       
       // Auto-select first workspace if none active
       if (!state.activeWorkspace && state.workspaces.length > 0) {
@@ -85,7 +88,7 @@ const workspaceSlice = createSlice({
     });
     builder.addCase(createWorkspace.fulfilled, (state, action) => {
       state.isLoading = false;
-      const newWorkspace = action.payload?.data;
+      const newWorkspace = action.payload?.data?.workspace;
       if (newWorkspace) {
         state.workspaces.push(newWorkspace);
         state.activeWorkspace = newWorkspace;
